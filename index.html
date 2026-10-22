@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Just Ask Aria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Poppins', -apple-system, sans-serif; background: #0e1116; color: #f2f4f7; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .card { max-width: 420px; width: 100%; text-align: center; }
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 10px; }
+  p { font-size: 16px; line-height: 1.55; color: #c8d0da; margin: 0 0 24px; font-weight: 400; }
+  a.btn { display: inline-flex; align-items: center; gap: 10px; background: #22a86b; color: #fff; font-size: 17px; font-weight: 600; text-decoration: none; padding: 15px 28px; border-radius: 10px; border: 2px solid #000; }
+  a.btn svg { width: 20px; height: 20px; flex: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Taking you to Just Ask Aria…</h1>
+  <p>One second — sending you to the website.</p>
+  <a class="btn" id="go" href="https://justaskaria.com">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    Continue to the website
+  </a>
+</div>
+<script>
+  (function () {
+    var API = "https://rqesrbingluxyludjtrh.supabase.co/functions/v1/site-visit";
+    var DEST = "https://justaskaria.com";
+    var c = new URLSearchParams(location.search).get("c") || "";
+    var fired = false;
+    function go(url) {
+      if (fired) return;
+      fired = true;
+      window.location.replace(url || DEST);
+    }
+    // Log the visit (tied to this person's CRM row), then send them on.
+    fetch(API + "?c=" + encodeURIComponent(c))
+      .then(function (r) { return r.json(); })
+      .then(function (d) { go(d && d.url ? d.url : DEST); })
+      .catch(function () { go(DEST); });
+    // Safety net: never strand a visitor on this page.
+    setTimeout(function () { go(DEST); }, 2500);
+  })();
+</script>
+</body>
+</html>
