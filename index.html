@@ -39,7 +39,12 @@
     // Log the visit (tied to this person's CRM row), then send them on.
     fetch(API + "?c=" + encodeURIComponent(c))
       .then(function (r) { return r.json(); })
-      .then(function (d) { go(d && d.url ? d.url : DEST); })
+      .then(function (d) {
+        var base = (d && d.url) ? d.url : DEST;
+        // Carry the prospect id onto the site so its page-view / scroll /
+        // time tracking (site-track) is attributable to this person.
+        go(c ? base + "?c=" + encodeURIComponent(c) : base);
+      })
       .catch(function () { go(DEST); });
     // Safety net: never strand a visitor on this page.
     setTimeout(function () { go(DEST); }, 2500);
